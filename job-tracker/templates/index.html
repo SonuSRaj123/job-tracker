@@ -1,0 +1,46 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Job Tracker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Job Application Tracker</h1>
+        <a href="/add" class="btn">+ Add Application</a>
+        <div class="stats">
+            <span>Total: {{ jobs|length }}</span>
+            <span>Interviews: {{ jobs|selectattr('status', 'equalto', 'Interview')|list|length }}</span>
+            <span>Offers: {{ jobs|selectattr('status', 'equalto', 'Offer')|list|length }}</span>
+            <span>Rejected: {{ jobs|selectattr('status', 'equalto', 'Rejected')|list|length }}</span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Company</th>
+                    <th>Role</th>
+                    <th>Date Applied</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for job in jobs %}
+                <tr>
+                    <td>{{ job.company }}</td>
+                    <td>{{ job.role }}</td>
+                    <td>{{ job.date_applied }}</td>
+                    <td><span class="status {{ job.status.lower() }}">{{ job.status }}</span></td>
+                    <td>
+                        <a href="/update/{{ job.id }}/Interview">Interview</a>
+                        <a href="/update/{{ job.id }}/Offer">Offer</a>
+                        <a href="/update/{{ job.id }}/Rejected">Rejected</a>
+                        <a href="/delete/{{ job.id }}" onclick="return confirm('Delete?')">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
